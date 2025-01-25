@@ -367,8 +367,8 @@ MonoBehaviour:
   uncontrollabilityFactor: 1.65
   driftFactor: 1.25
   speedBuildupMultiplier: 1.25
-  accelerationRampSpeed: 5
-  boostMultiplier: 4
+  accelerationRampSpeed: 3
+  boostMultiplier: 3
   boostDuration: 2
   boostCooldown: 2
   currentSpeed: 0
@@ -525,7 +525,7 @@ MonoBehaviour:
   baseDistance: 5
   speedEffectMultiplier: 0.6
   maxDistanceChange: 4
-  followSpeed: 5
+  followSpeed: 4
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -23233,7 +23233,7 @@ MonoBehaviour:
   - 0.4
   poolSize: 20
   spawnRangeX: 5
-  spawnSpacing: 25
+  spawnSpacing: 20
   despawnDistance: 20
   difficultyMultiplier: 5
   player: {fileID: 286044663}
