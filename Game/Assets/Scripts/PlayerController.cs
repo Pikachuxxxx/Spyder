@@ -1,0 +1,78 @@
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+    private Rigidbody m_RigidBody;
+    private Camera m_Camera;
+
+    [Header("Movement Settings (m/s)")]
+    public float forceMultiplier = 10f;
+    public float maxSpeed = 25f;
+
+    [Header("Inertia Settings")]
+    public float inertiaDamping = 0.97f;
+    public float stoppingResistance = 0.85f;
+
+    [Header("Deceleration Settings")]
+    public float decelerationForce = 5f;
+    public float minimumSpeedForDeceleration = 0.5f;
+
+    [Header("Uncontrollable Movement Settings")]
+    public float uncontrollabilityFactor = 1.5f;
+    public float driftFactor = 1.5f;
+    public float speedBuildupMultiplier = 1.2f;
+
+    [Header("Debug Info")]
+    public float currentSpeed = 0f;
+
+    private Vector3 lastInputDirection = Vector3.zero;
+
+    void Start()
+    {
+        m_RigidBody = GetComponent<Rigidbody>();
+        m_Camera = Camera.main;
+    }
+
+    void FixedUpdate()
+    {
+        float inputX = Input.GetAxis("Horizontal");
+        float inputZ = Input.GetAxis("Vertical");
+
+        Vector3 inputDirection = new Vector3(inputX, 0, inputZ).normalized;
+
+        if (inputDirection.magnitude > 0)
+        {
+            Vector3 driftedDirection = Vector3.Lerp(lastInputDirection, inputDirection, 1f - driftFactor).normalized;
+
+            Vector3 randomForce = new Vector3(
+                Random.Range(-uncontrollabilityFactor, uncontrollabilityFactor),
+                0,
+                Random.Range(-uncontrollabilityFactor, uncontrollabilityFactor)
+            );
+
+            if (m_RigidBody.linearVelocity.magnitude < maxSpeed)
+            {
+                m_RigidBody.AddForce((driftedDirection + randomForce) * forceMultiplier, ForceMode.Force);
+
+                // forceMultiplier += speedBuildupMultiplier * Time.fixedDeltaTime;
+            }
+
+            lastInputDirection = inputDirection;
+        }
+        else if (inputDirection.magnitude < 0)
+        {
+            forceMultiplier = 15f;
+
+            m_RigidBody.linearVelocity *= stoppingResistance;
+
+            if (m_RigidBody.linearVelocity.magnitude > minimumSpeedForDeceleration)
+            {
+                Vector3 deceleration = -m_RigidBody.linearVelocity.normalized * decelerationForce;
+                m_RigidBody.AddForce(deceleration, ForceMode.Force);
+            }
+        }
+
+        m_RigidBody.linearVelocity *= inertiaDamping;
+        currentSpeed = m_RigidBody.linearVelocity.magnitude;
+    }
+}
