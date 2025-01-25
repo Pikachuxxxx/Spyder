@@ -150,7 +150,8 @@ public class EndlessScroller : MonoBehaviour
         float platformLength = selectedPlatform.transform.localScale.z;
 
         Vector3 spawnPosition = new Vector3(0, 0, nextPlatformSpawnZ);
-        Destroy(Instantiate(selectedPlatform, spawnPosition, Quaternion.identity), 25.0f);
+        // Destroy(Instantiate(selectedPlatform, spawnPosition, Quaternion.identity), 120.0f);
+        Instantiate(selectedPlatform, spawnPosition, Quaternion.identity);
 
         nextPlatformSpawnZ += platformLength;
     }
