@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class EndlessScroller : MonoBehaviour
 {
-    [Header("Spawn Settings")]
+    [Header("Obstacles Spawn Settings")]
     public GameObject[] prefabs;
     [Range(0f, 1f)] public float[] probabilities;
 
@@ -12,16 +12,21 @@ public class EndlessScroller : MonoBehaviour
     public float spawnSpacing = 20f;
     public float despawnDistance = 50f;
 
+    [Header("Difficulty Settings")]
+    public float difficultyMultiplier = 1f;
+
     [Header("Player Settings")]
     public Transform player;
     public float spawnAheadDistance = 100f;
 
-    [Header("Difficulty Settings")]
-    public float difficultyMultiplier = 1f;
+    [Header("Platform Settings")]
+    public GameObject[] platformPrefabs;
+    public float platformSpawnAheadDistance = 200f;
 
     private Queue<GameObject> objectPool = new Queue<GameObject>();
-    private float nextSpawnZ;
-
+    private float nextObstacleSpawnZ = 0.0f;
+    private float nextPlatformSpawnZ = 0.0f;
+    
     private float PREFAB_SPAWN_Y_OFFSET = 0.3f;
     private float PREFAB_SPAWN_Y_ROTATION = 90.0f;
 
@@ -30,15 +35,20 @@ public class EndlessScroller : MonoBehaviour
         ValidateProbabilities();
         NormalizeProbabilities();
         InitializeObjectPool();
-        nextSpawnZ = player.position.z;
+        nextObstacleSpawnZ = player.position.z;
     }
 
     private void Update()
     {
-        while (player.position.z + spawnAheadDistance > nextSpawnZ)
+        while (player.position.z + spawnAheadDistance > nextObstacleSpawnZ)
         {
             SpawnObject();
-            nextSpawnZ += spawnSpacing / difficultyMultiplier;
+            nextObstacleSpawnZ += spawnSpacing / difficultyMultiplier;
+        }
+
+        if (player.position.z + platformSpawnAheadDistance > nextPlatformSpawnZ)
+        {
+            SpawnPlatform();
         }
 
         RecycleObjects();
@@ -96,7 +106,7 @@ public class EndlessScroller : MonoBehaviour
         GameObject obj = objectPool.Dequeue();
 
         float randomX = Random.Range(-spawnRangeX, spawnRangeX);
-        Vector3 spawnPosition = new Vector3(randomX, PREFAB_SPAWN_Y_OFFSET, nextSpawnZ);
+        Vector3 spawnPosition = new Vector3(randomX, PREFAB_SPAWN_Y_OFFSET, nextObstacleSpawnZ);
 
         obj.transform.position = spawnPosition;
         obj.transform.rotation = Quaternion.Euler(0, PREFAB_SPAWN_Y_ROTATION, 0);
@@ -131,5 +141,17 @@ public class EndlessScroller : MonoBehaviour
         }
 
         return null;
+    }
+
+    void SpawnPlatform()
+    {
+        GameObject selectedPlatform = platformPrefabs[Random.Range(0, platformPrefabs.Length)];
+
+        float platformLength = selectedPlatform.transform.localScale.z;
+
+        Vector3 spawnPosition = new Vector3(0, 0, nextPlatformSpawnZ);
+        Destroy(Instantiate(selectedPlatform, spawnPosition, Quaternion.identity), 25.0f);
+
+        nextPlatformSpawnZ += platformLength;
     }
 }

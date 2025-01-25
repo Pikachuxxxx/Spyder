@@ -46,23 +46,10 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.Space) && Time.time >= nextBoostTime)
+        if (isBoosting && Time.time >= boostEndTime)
         {
-            isBoosting = true;
-            boostEndTime = Time.time + boostDuration;
-            nextBoostTime = Time.time + boostCooldown;
+            isBoosting = false; // End the boost effect
         }
-
-        if (isBoosting)
-        {
-            currentForceMultiplier = forceMultiplier * boostMultiplier;
-
-            if (Time.time >= boostEndTime)
-            {
-                isBoosting = false;
-            }
-        }
-
     }
 
     void FixedUpdate()
@@ -87,17 +74,14 @@ public class PlayerController : MonoBehaviour
             if (m_RigidBody.linearVelocity.magnitude < maxSpeed)
             {
                 m_RigidBody.AddForce((driftedDirection + randomForce) * currentForceMultiplier, ForceMode.Force);
-
-                // FIXME: Disbale this for more accurate control
-                // forceMultiplier += speedBuildupMultiplier * Time.fixedDeltaTime;
             }
 
             lastInputDirection = inputDirection;
         }
-        else if (inputDirection.magnitude < 0)
+        else
         {
             currentForceMultiplier = 0f;
-            forceMultiplier = 15f;
+            forceMultiplier = 10f;
 
             m_RigidBody.linearVelocity *= stoppingResistance;
 
@@ -110,5 +94,23 @@ public class PlayerController : MonoBehaviour
 
         m_RigidBody.linearVelocity *= inertiaDamping;
         currentSpeed = m_RigidBody.linearVelocity.magnitude;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ramp"))
+        {
+            ActivateSpeedBoost();
+        }
+    }
+
+    private void ActivateSpeedBoost()
+    {
+        if (!isBoosting && Time.time >= nextBoostTime)
+        {
+            isBoosting = true;
+            boostEndTime = Time.time + boostDuration;
+            nextBoostTime = Time.time + boostCooldown;
+        }
     }
 }
