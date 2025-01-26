@@ -7,6 +7,8 @@ public class AudioTest : MonoBehaviour
     void Start()
     {
         AudioManager.Instance.PlayMusic("BGM_1");
+        AudioManager.Instance.PlayLoopSFX("Rock_Roll");
+        
         Invoke("PlayAfterDelay",3);
         Invoke("PlayAfterDelay2",4);
     }

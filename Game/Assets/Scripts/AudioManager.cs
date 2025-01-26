@@ -8,13 +8,18 @@ public class AudioManager : MonoBehaviour
     [Header("Audio Sources")]
     public AudioSource musicSource;
     public AudioSource sfxSource;
+    public AudioSource loopSfxSource;
 
     [Header("Audio Clips")]
     public List<AudioClip> musicClips;
     public List<AudioClip> sfxClips;
 
+    public List<AudioClip> loopSfxClips;
+
     private Dictionary<string, AudioClip> musicDict = new Dictionary<string, AudioClip>();
     private Dictionary<string, AudioClip> sfxDict = new Dictionary<string, AudioClip>();
+
+    private Dictionary<string, AudioClip> loopSfxDict = new Dictionary<string, AudioClip>();
 
     private void Awake()
     {
@@ -42,6 +47,11 @@ public class AudioManager : MonoBehaviour
         {
             sfxDict[clip.name] = clip;
         }
+
+         foreach (var clip in loopSfxClips)
+        {
+            loopSfxDict[clip.name] = clip;
+        }
     }
 
     public void PlayMusic(string clipName, bool loop = true)
@@ -62,7 +72,25 @@ public class AudioManager : MonoBehaviour
     {
         musicSource.Stop();
     }
+public void PlayLoopSFX(string clipName, bool loop = true)
+    {
+        if (loopSfxDict.TryGetValue(clipName, out AudioClip clip))
+        {
+            loopSfxSource.clip = clip;
+            loopSfxSource.loop = loop;
+            loopSfxSource.Play();
+        }
+        else
+        {
+            Debug.LogWarning($"Music clip '{clipName}' not found!");
+        }
+    }
 
+    public void StopLoopSFX()
+    {
+        loopSfxSource.Stop();
+    }
+    
     public void PlaySFX(string clipName)
     {
         if (sfxDict.TryGetValue(clipName, out AudioClip clip))
