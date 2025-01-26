@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - Ramp
+  - RockAI
+  - Vehicle
   layers:
   - Default
   - TransparentFX
@@ -12,10 +14,10 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - RockAI
+  - Ground
+  - Vehicle
+  - Player
   - 
   - 
   - 
