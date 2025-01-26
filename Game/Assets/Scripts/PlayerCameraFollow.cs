@@ -37,7 +37,7 @@ public class DynamicCameraController : MonoBehaviour
         float playerSpeed = playerController.currentSpeed;
 
         float dynamicDistance = baseDistance + Mathf.Clamp(playerSpeed * speedEffectMultiplier, -maxDistanceChange, maxDistanceChange);
-        offset = new Vector3(0, dynamicDistance, -dynamicDistance);
+        offset = new Vector3(0, 2.5f, dynamicDistance);
 
         Vector3 desiredPosition = player.position + offset;
         transform.position = Vector3.Lerp(transform.position, desiredPosition, followSpeed * Time.deltaTime);
