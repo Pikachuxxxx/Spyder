@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -34,14 +35,19 @@ public class PlayerController : MonoBehaviour
 
     [Header("Debug Info")]
     public float currentSpeed = 0f;
+    public float resetDelay = 3f;
 
     private Vector3 lastInputDirection = Vector3.zero;
     private float currentForceMultiplier;
+
+    private Animator animator;
 
     void Start()
     {
         m_RigidBody = GetComponent<Rigidbody>();
         m_Camera = Camera.main;
+
+        animator = GetComponentInChildren<Animator>();
     }
 
     void Update()
@@ -102,6 +108,16 @@ public class PlayerController : MonoBehaviour
         {
             ActivateSpeedBoost();
         }
+
+        if(collision.gameObject.CompareTag("RockAI")) 
+        {
+            GetComponent<MeshRenderer>().enabled = false;
+            GetComponent<SphereCollider>().enabled = false;
+            // play dead animation
+            animator.SetTrigger("Dead");
+            ResetLevelWithDelay();
+
+        }
     }
 
     private void ActivateSpeedBoost()
@@ -112,5 +128,20 @@ public class PlayerController : MonoBehaviour
             boostEndTime = Time.time + boostDuration;
             nextBoostTime = Time.time + boostCooldown;
         }
+    }
+
+
+    public void ResetLevelWithDelay()
+    {
+        StartCoroutine(ResetLevelCoroutine());
+    }
+
+    private System.Collections.IEnumerator ResetLevelCoroutine()
+    {
+        // Wait for the specified delay
+        yield return new WaitForSeconds(resetDelay);
+
+        // Reload the current scene
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
