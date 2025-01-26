@@ -4,10 +4,8 @@ public class VehicleMorph : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject);
         if(other.gameObject.CompareTag("RockAI")) {
             SkinnedMeshRenderer skinnedMeshRenderer = GetComponent<SkinnedMeshRenderer>();
-            Debug.Log("SJFDBJHFGKEBFJKLEHSLFHELJ");
             StartCoroutine(AnimateBlendShape(skinnedMeshRenderer));
         }
     }
