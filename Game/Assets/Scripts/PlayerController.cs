@@ -1,4 +1,6 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -38,6 +40,11 @@ public class PlayerController : MonoBehaviour
     private Vector3 lastInputDirection = Vector3.zero;
     private float currentForceMultiplier;
 
+    public Transform playerPos;
+    public float playerDist;
+
+    public TMP_Text playerScore;
+
     void Start()
     {
         m_RigidBody = GetComponent<Rigidbody>();
@@ -50,6 +57,12 @@ public class PlayerController : MonoBehaviour
         {
             isBoosting = false; // End the boost effect
         }
+        playerDist = (int)playerPos.position.z+21;
+        playerDist = playerDist*69;
+
+        playerScore.text = playerDist.ToString();
+
+
     }
 
     void FixedUpdate()
