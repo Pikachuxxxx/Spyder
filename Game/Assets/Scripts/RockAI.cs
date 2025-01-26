@@ -9,11 +9,16 @@ public class RockAI : MonoBehaviour
     public float catchUpFactor = 1f;
     public float transparentAlpha = 0.2f;
     public float transitionSpeed = 2f;
+    public float fadeDistance = 5f;
+    public float minAlpha = 0.1f;
+    public float fadeSpeed = 2f;
+
 
     private Transform player;
+    private Camera mainCamera;
 
     private Rigidbody rb;
-    private Material ballMaterial;
+    private Renderer objectRenderer;
 
     private Color originalColor;
     private bool isTransparent = false;
@@ -22,14 +27,26 @@ public class RockAI : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         player = GameObject.FindWithTag("Player").transform;
-        ballMaterial = GetComponent<Renderer>().material;
-        if (ballMaterial != null)
-            originalColor = ballMaterial.color;
+        mainCamera = Camera.main;
+        objectRenderer = GetComponent<Renderer>();
+        originalColor = objectRenderer.material.color;
+    }
+
+    void Update()
+    {
+        float distance = Vector3.Distance(transform.position, mainCamera.transform.position);
+        float targetAlpha = distance <= fadeDistance ? minAlpha : 1f;
+
+        Color currentColor = objectRenderer.material.color;
+        float newAlpha = Mathf.Lerp(currentColor.a, targetAlpha, Time.deltaTime * fadeSpeed);
+        objectRenderer.material.color = new Color(originalColor.r, originalColor.g, originalColor.b, newAlpha);
+  
     }
 
     void FixedUpdate()
     {
         ApplyForceTowardsPlayer();
+        
     }
 
     private void ApplyForceTowardsPlayer()
@@ -43,34 +60,5 @@ public class RockAI : MonoBehaviour
         targetForce = Mathf.Clamp(targetForce, baseForce, maxForce);
 
         rb.AddForce(direction * targetForce, ForceMode.Acceleration);
-    }
-
-    private void HandleTransparency()
-    {
-        if (isTransparent && ballMaterial != null)
-        {
-            Color transparentColor = new Color(originalColor.r, originalColor.g, originalColor.b, transparentAlpha);
-            ballMaterial.color = Color.Lerp(ballMaterial.color, transparentColor, Time.deltaTime * transitionSpeed);
-        }
-        else if (ballMaterial != null)
-        {
-            ballMaterial.color = Color.Lerp(ballMaterial.color, originalColor, Time.deltaTime * transitionSpeed);
-        }
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("MainCamera"))
-        {
-            isTransparent = true;
-        }
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("MainCamera"))
-        {
-            isTransparent = false;
-        }
     }
 }
