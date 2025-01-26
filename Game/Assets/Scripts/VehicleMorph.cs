@@ -20,5 +20,20 @@ public class VehicleMorph : MonoBehaviour
             skinnedMeshRenderer.SetBlendShapeWeight(0, blendValue);
             yield return null;
         }
+
+        StartCoroutine(ResetBlendShape(skinnedMeshRenderer, 5f));
+    }
+
+    private System.Collections.IEnumerator ResetBlendShape(SkinnedMeshRenderer skinnedMeshRenderer, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        float blendValue = 100f;
+        while (blendValue > 0f)
+        {
+            blendValue -= Time.deltaTime * 250f;
+            skinnedMeshRenderer.SetBlendShapeWeight(0, blendValue);
+            yield return null;
+        }
     }
 }

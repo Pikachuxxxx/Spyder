@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &210179231098631624
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 215046454705014104}
+  - component: {fileID: 2449002712731601215}
+  m_Layer: 0
+  m_Name: SceneGen
+  m_TagString: Untagged
+  m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &215046454705014104
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 210179231098631624}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2449002712731601215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 210179231098631624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d8be1c0e78334c82b040f5ff3623327, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabs:
+  - {fileID: 2261397101643479217, guid: 24c6e2459ddb248feb517575595f7ef8, type: 3}
+  - {fileID: 4232394380205647296, guid: 51abeef81dac946fe920baaea7520386, type: 3}
+  - {fileID: 7337392563387517986, guid: 5a191870e7907482fb32394e5b164858, type: 3}
+  - {fileID: 6241588846602536334, guid: b9712eb3e8cb647b78715eeabf9a47e6, type: 3}
+  - {fileID: 8973030187023098768, guid: fc4d5691f7fc3407f8f44feceb3bb74d, type: 3}
+  - {fileID: 9172858101809783679, guid: 7e86bbd4d5c204582a2293d1d0c18b08, type: 3}
+  - {fileID: 3412691245962139756, guid: e171f1835adea416588c09f9ac10f55c, type: 3}
+  probabilities:
+  - 0.5
+  - 0.1
+  - 0.298
+  - 0.159
+  - 0.212
+  - 0.225
+  - 0.159
+  poolSize: 20
+  spawnRangeX: 5
+  spawnSpacing: 20
+  despawnDistance: 20
+  difficultyMultiplier: 5
+  player: {fileID: 0}
+  spawnAheadDistance: 50
+  platformPrefabs:
+  - {fileID: 6895988540200102635, guid: 8373798617f1841f0a419fcbdff5eaa4, type: 3}
+  platformSpawnAheadDistance: 200
